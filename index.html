@@ -772,6 +772,292 @@ input:focus,select:focus,textarea:focus{
   box-shadow:0 0 0 3px rgba(201,255,56,.13)!important;
 }
 
+
+/* =========================================================
+   VITA — MOBILE CLIENTS: ZERO HORIZONTAL SCROLL
+   ========================================================= */
+@media (max-width: 680px){
+  /* Never allow the client list to create page-wide horizontal overflow. */
+  body, .main, .content, .page, .card{
+    max-width:100vw;
+    min-width:0;
+  }
+
+  /* Any wrapper around the client table becomes viewport-width. */
+  #clientes .table-wrap,
+  #clientes .table-scroll,
+  #clientes .card.scroll,
+  #clientes .table-container,
+  .clientes .table-wrap,
+  .clientes .table-scroll,
+  .clientes .card.scroll,
+  .clientes .table-container{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:hidden!important;
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+
+  /* Convert the actual client table into stacked information cards. */
+  #clientes table,
+  .clientes table,
+  table.client-table{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    table-layout:auto!important;
+  }
+
+  #clientes table thead,
+  .clientes table thead,
+  table.client-table thead{
+    display:none!important;
+  }
+
+  #clientes table tbody,
+  .clientes table tbody,
+  table.client-table tbody{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+
+  #clientes table tbody tr,
+  .clientes table tbody tr,
+  table.client-table tbody tr{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 42px!important;
+    gap:5px 10px!important;
+    width:100%!important;
+    min-width:0!important;
+    padding:14px 2px!important;
+    margin:0!important;
+    border-bottom:1px solid var(--border)!important;
+  }
+
+  #clientes table tbody td,
+  .clientes table tbody td,
+  table.client-table tbody td{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    padding:2px 0!important;
+    border:0!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    overflow-wrap:anywhere!important;
+    word-break:break-word!important;
+  }
+
+  /* Labels are created by JS/CSS for readability. */
+  #clientes table tbody td[data-label]::before,
+  .clientes table tbody td[data-label]::before,
+  table.client-table tbody td[data-label]::before{
+    content:attr(data-label);
+    display:block!important;
+    margin-bottom:2px;
+    color:var(--muted);
+    font-size:8px;
+    line-height:1.2;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.55px;
+  }
+
+  /* Actions stay fixed on the right, never forcing horizontal scroll. */
+  #clientes table tbody td:last-child,
+  .clientes table tbody td:last-child,
+  table.client-table tbody td:last-child{
+    grid-column:2!important;
+    grid-row:1 / -1!important;
+    align-self:start!important;
+    justify-self:end!important;
+    width:42px!important;
+    min-width:42px!important;
+    max-width:42px!important;
+    white-space:normal!important;
+  }
+
+  /* Stack the pen above the trash, as in the original desktop layout. */
+  #clientes table tbody td:last-child button,
+  .clientes table tbody td:last-child button,
+  table.client-table tbody td:last-child button,
+  #clientes table tbody td:last-child a,
+  .clientes table tbody td:last-child a,
+  table.client-table tbody td:last-child a{
+    display:flex!important;
+    width:34px!important;
+    height:34px!important;
+    min-width:34px!important;
+    margin:0 0 6px!important;
+    align-items:center!important;
+    justify-content:center!important;
+    padding:0!important;
+  }
+
+  /* Prevent long URLs, emails and values from creating overflow. */
+  #clientes *,
+  .clientes *,
+  table.client-table *{
+    max-width:100%;
+    overflow-wrap:anywhere;
+  }
+}
+
+/* Extra-small phones */
+@media (max-width:390px){
+  #clientes table tbody tr,
+  .clientes table tbody tr,
+  table.client-table tbody tr{
+    grid-template-columns:minmax(0,1fr) 38px!important;
+    gap:4px 7px!important;
+  }
+
+  #clientes table tbody td:last-child,
+  .clientes table tbody td:last-child,
+  table.client-table tbody td:last-child{
+    width:38px!important;
+    min-width:38px!important;
+    max-width:38px!important;
+  }
+
+  #clientes table tbody td:last-child button,
+  .clientes table tbody td:last-child button,
+  table.client-table tbody td:last-child button,
+  #clientes table tbody td:last-child a,
+  .clientes table tbody td:last-child a,
+  table.client-table tbody td:last-child a{
+    width:32px!important;
+    height:32px!important;
+    min-width:32px!important;
+  }
+}
+
+/* =========================================================
+   VITA — DEEP DESATURATED GREEN IDENTITY
+   ========================================================= */
+:root{
+  --bg:#263a34;
+  --bg-deep:#20332e;
+  --surface:#f8f9f7;
+  --surface-2:#f0f3ef;
+  --text:#111614;
+  --muted:#6e7772;
+  --border:#dfe5e0;
+  --primary:#111614;
+  --primary-2:#1c2723;
+  --accent:#d9dfd9;
+}
+
+body{
+  background-color:var(--bg)!important;
+  background-image:
+    radial-gradient(circle at 15% 15%,rgba(255,255,255,.045) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 80% 70%,rgba(255,255,255,.035) 0 1px,transparent 1.5px),
+    linear-gradient(135deg,rgba(255,255,255,.018),transparent 35%,rgba(0,0,0,.045))!important;
+  background-size:22px 22px,31px 31px,100% 100%!important;
+  background-attachment:fixed!important;
+}
+
+/* Main content sits on the green canvas; cards remain light and premium. */
+.main{
+  background:transparent!important;
+}
+.top h1,
+.top p{
+  color:#f2f5f2!important;
+}
+.top p{
+  opacity:.72;
+}
+
+.section-title h2{
+  color:#f2f5f2!important;
+}
+.section-title:after{
+  background:rgba(255,255,255,.14)!important;
+}
+
+.vita-user-brand{
+  background:rgba(14,22,19,.68)!important;
+  border-color:rgba(255,255,255,.14)!important;
+  color:#f4f6f4!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.18)!important;
+}
+
+.card,.kpi,.content-card,.col{
+  background:rgba(248,249,247,.97)!important;
+  border-color:rgba(15,25,21,.09)!important;
+}
+
+/* Sidebar stays darker than the green canvas. */
+.sidebar{
+  background:#111b18!important;
+  border-right-color:rgba(255,255,255,.08)!important;
+}
+.sidebar .brand{
+  color:#f4f6f4!important;
+}
+.sidebar a,
+.sidebar button{
+  color:#b9c2bd!important;
+}
+.sidebar a.active,
+.sidebar button.active{
+  background:rgba(220,226,221,.09)!important;
+  color:#fff!important;
+  border-color:rgba(255,255,255,.10)!important;
+}
+
+/* Buttons: monochrome, no blue anywhere. */
+.btn,
+button{
+  --button-blue:transparent;
+}
+.btn.primary,
+.btn:not(.secondary){
+  background:#111614!important;
+  color:#fff!important;
+  border-color:#111614!important;
+}
+.btn.secondary{
+  background:#eef1ee!important;
+  color:#202722!important;
+  border-color:#dce2dd!important;
+}
+
+/* Mobile menu button: force monochrome hamburger. */
+.menu-btn,
+.menu-btn *,
+button.menu-btn,
+button.menu-btn *{
+  color:#fff!important;
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+.menu-btn{
+  filter:grayscale(1)!important;
+  -webkit-filter:grayscale(1)!important;
+}
+.menu-btn svg,
+.menu-btn path,
+.menu-btn line,
+.menu-btn span{
+  stroke:#fff!important;
+  fill:#fff!important;
+  color:#fff!important;
+}
+
+/* Premium green ambient glow without adding a new saturated brand color. */
+.kpi:after{
+  background:rgba(38,58,52,.09)!important;
+}
+
 </style>
 </head>
 <body>
@@ -921,7 +1207,7 @@ function loginAs(name){
   closeModal();
   updateCurrentUserUI();
   render();
-  showToast(`Conta alterada para ${name}.`, "👤");
+  showToast(`Conta alterada para ${name}.`, "○");
 }
 
 // --- FUNÇÕES UTILITÁRIAS ---
@@ -931,7 +1217,7 @@ function escapeHTML(value){
   }[ch]));
 }
 function money(v){ return Number(v).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}) }
-function showToast(msg, icon="✅") {
+function showToast(msg, icon="✓") {
   const container = document.getElementById('toast-container');
   const toast = document.createElement('div');
   toast.className = 'toast';
@@ -954,14 +1240,14 @@ function getFormatColor(format) {
 // --- NAVEGAÇÃO ---
 function nav(){
   const items = [
-    ["dashboard","Dashboard","📊"], ["clientes","Clientes","👥"], 
-    ["conteudos","Conteúdos & Fluxo","📱"], ["calendario","Calendário","📅"], 
-    ["captacoes","Captações","🎥"], ["tarefas","Tarefas","✅"], 
-    ["equipe","Equipe","👤"], ["relatorios","Relatórios","📈"], 
-    ["gestao","Gestão Comercial","💰"], ["config","Configurações","⚙️"]
+    ["dashboard","Dashboard","▦"], ["clientes","Clientes","○"], 
+    ["conteudos","Conteúdos & Fluxo","📱"], ["calendario","Calendário","□"], 
+    ["captacoes","Captações","🎥"], ["tarefas","Tarefas","✓"], 
+    ["equipe","Equipe","○"], ["relatorios","Relatórios","↗"], 
+    ["gestao","Gestão Comercial","$"], ["config","Configurações","⚙️"]
   ];
   document.getElementById("nav").innerHTML = items.map(([id, label, icon]) => {
-    if(id === "gestao" && !restricted) return `<button class="restricted" onclick="openGate()">🔒 ${label}</button>`;
+    if(id === "gestao" && !restricted) return `<button class="restricted" onclick="openGate()">◈ ${label}</button>`;
     if(id === "gestao" && restricted) return `<button class="restricted ${active===id?'active':''}" onclick="show('gestao')">🔓 ${label}</button>`;
     return `<button class="${active===id?'active':''}" onclick="show('${id}')"><span>${icon} &nbsp; ${label}</span></button>`;
   }).join("");
@@ -1001,7 +1287,7 @@ function openCalendarDay(key){
   html += `<p style="color:var(--muted);font-size:13px">${captures.length + tasks.length} evento(s) neste dia.</p>`;
   if(!captures.length && !tasks.length) html += `<div class="card" style="background:var(--surface-2);box-shadow:none"><p style="margin:0;color:var(--muted)">Nenhum evento cadastrado para este dia.</p></div>`;
   if(captures.length) html += `<h3 style="margin:18px 0 8px">🎥 Captações</h3>${captures.map(c=>`<div class="task"><div>🎥</div><div><b>${escapeHTML(c.client)}</b><small style="display:block;color:var(--muted)">${escapeHTML(c.time||'Sem horário')} · ${escapeHTML(c.loc||'Sem local')}<br>Responsável: ${escapeHTML(c.resp||'—')}</small></div></div>`).join('')}`;
-  if(tasks.length) html += `<h3 style="margin:18px 0 8px">✅ Tarefas</h3>${tasks.map(t=>`<div class="task"><div>✓</div><div><b>${escapeHTML(t.title)}</b><small style="display:block;color:var(--muted)">${escapeHTML(t.status||'A fazer')} · Responsável: ${escapeHTML(t.resp||'—')}</small></div></div>`).join('')}`;
+  if(tasks.length) html += `<h3 style="margin:18px 0 8px">✓ Tarefas</h3>${tasks.map(t=>`<div class="task"><div>✓</div><div><b>${escapeHTML(t.title)}</b><small style="display:block;color:var(--muted)">${escapeHTML(t.status||'A fazer')} · Responsável: ${escapeHTML(t.resp||'—')}</small></div></div>`).join('')}`;
   html += `<div class="form-actions"><button class="btn secondary" onclick="closeModal()">Fechar</button></div>`;
   document.getElementById('modalBox').innerHTML=html;
   document.getElementById('modal').classList.add('show');
@@ -1032,8 +1318,8 @@ function render(){
           <input class="check" type="checkbox" onchange="toggleTaskStatus(${t.id})" ${t.status==="Concluída"?"checked":""}>
           <div class="task-main">
             <div class="task-title-row"><b>${t.title}</b></div>
-            <div class="task-meta">👤 ${t.resp} · 📅 Prazo: ${formatDateBR(t.date)}</div>
-            ${t.notes ? `<div class="task-note">📝 ${escapeHTML(t.notes)}</div>` : ""}
+            <div class="task-meta">○ ${t.resp} · □ Prazo: ${formatDateBR(t.date)}</div>
+            ${t.notes ? `<div class="task-note">✎ ${escapeHTML(t.notes)}</div>` : ""}
           </div>
           <span class="pill ${t.prio==="Urgente"?"bad":t.prio==="Alta"?"warn":""}">${t.prio}</span>
         </div>`).join("") || '<p class="muted">Nenhuma tarefa pendente.</p>'}
@@ -1062,7 +1348,7 @@ function render(){
           <td>${escapeHTML(c.services || "—")}</td>
           <td><span class="pill ${c.status==='Ativo'?'good':c.status==='Pausado'?'warn':'bad'}">${escapeHTML(c.status || 'Ativo')}</span></td>
           <td>${c.instagram ? `<span class="muted">@${escapeHTML(c.instagram.replace(/^@/,''))}</span>` : '<span class="muted">—</span>'}</td>
-          <td><button class="btn icon" onclick="openClientEditor(${c.id})" title="Editar cliente">✎</button> <button class="btn icon" onclick="deleteItem('clients', ${c.id})" title="Excluir">🗑️</button></td>
+          <td><button class="btn icon" onclick="openClientEditor(${c.id})" title="Editar cliente">✎</button> <button class="btn icon" onclick="deleteItem('clients', ${c.id})" title="Excluir">⌫</button></td>
         </tr>`).join("")}
       </tbody>
     </table>
@@ -1101,7 +1387,7 @@ function render(){
             <span class="format-tag pill ${getFormatColor(c.format)}">${escapeHTML(c.format)}</span>
             <b>${escapeHTML(c.title)}</b>
             <small>🏢 ${escapeHTML(c.client)}</small>
-            ${c.notes ? `<div class="content-note">📝 ${escapeHTML(c.notes)}</div>` : ""}
+            ${c.notes ? `<div class="content-note">✎ ${escapeHTML(c.notes)}</div>` : ""}
             <div class="content-edit-bar">
               <select class="content-stage" onclick="event.stopPropagation()" onchange="setContentStage(${c.id}, this.value)">
                 ${stages.map(st=>`<option value="${st}" ${c.stage===st?"selected":""}>${st}</option>`).join("")}
@@ -1111,7 +1397,7 @@ function render(){
               </select>
             </div>
             <div class="meta">
-              <span class="assignee">👤 ${escapeHTML(c.resp)}</span>
+              <span class="assignee">○ ${escapeHTML(c.resp)}</span>
               <button type="button" class="content-edit-btn" onclick="event.stopPropagation(); openContentEditor(${c.id})">✎ Editar</button>
             </div>
           </div>
@@ -1174,9 +1460,9 @@ function render(){
       <div class="card">
         <span class="pill warn" style="float:right">Agendada</span>
         <h3 style="margin-top:0">${c.client}</h3>
-        <p style="color:var(--muted); font-size:14px; margin:5px 0">📅 ${formatDateBR(c.date)} às ${c.time}</p>
+        <p style="color:var(--muted); font-size:14px; margin:5px 0">□ ${formatDateBR(c.date)} às ${c.time}</p>
         <p style="font-size:14px; margin:5px 0">📍 ${escapeHTML(c.loc)}</p>
-        <p style="font-size:13px;color:var(--muted);margin:7px 0">👤 Responsável: <b>${escapeHTML(c.resp || "—")}</b></p>
+        <p style="font-size:13px;color:var(--muted);margin:7px 0">○ Responsável: <b>${escapeHTML(c.resp || "—")}</b></p>
         <div style="margin-top:15px; display:flex; gap:5px">
            <button class="btn icon danger" onclick="deleteItem('captures', ${c.id})">Cancelar</button>
         </div>
@@ -1202,8 +1488,8 @@ function render(){
             <b>${escapeHTML(t.title)}</b>
             <span class="pill ${t.prio==="Urgente"?"bad":t.prio==="Alta"?"warn":""}">${t.prio}</span>
           </div>
-          <div class="task-meta">👤 ${t.resp} · 📅 Prazo: ${formatDateBR(t.date)}</div>
-          ${t.notes ? `<div class="task-note">📝 ${escapeHTML(t.notes)}</div>` : `<div class="task-meta">Sem observações</div>`}
+          <div class="task-meta">○ ${t.resp} · □ Prazo: ${formatDateBR(t.date)}</div>
+          ${t.notes ? `<div class="task-note">✎ ${escapeHTML(t.notes)}</div>` : `<div class="task-meta">Sem observações</div>`}
         </div>
         <div class="task-actions">
           <select class="status-select" onchange="setTaskStatus(${t.id}, this.value)" title="Alterar situação">
@@ -1213,7 +1499,7 @@ function render(){
             ${db.team.map(u=>`<option value="${u.name}" ${t.resp===u.name?"selected":""}>${u.name}</option>`).join("")}
           </select>
           <button type="button" class="task-edit-btn" onclick="openTaskEditor(${t.id})">✎ Editar</button>
-          <button type="button" class="btn icon" onclick="deleteItem('tasks', ${t.id})" title="Excluir">🗑️</button>
+          <button type="button" class="btn icon" onclick="deleteItem('tasks', ${t.id})" title="Excluir">⌫</button>
         </div>
       </div>`).join("") || '<p class="muted">Nenhuma tarefa no sistema.</p>'}
   </div>`);
@@ -1248,7 +1534,7 @@ function render(){
         ${db.clients.map(c=>`<option>${c.name}</option>`).join("")}
       </select>
       <div style="display:flex; gap:10px;">
-        <button class="btn secondary" onclick="showToast('Link de aprovação copiado!', '🔗')">Copiar Link de Aprovação</button>
+        <button class="btn secondary" onclick="showToast('Link de aprovação copiado!', '↗')">Copiar Link de Aprovação</button>
         <button class="btn" onclick="showToast('Relatório gerado com sucesso!', '📄')">Baixar PDF</button>
       </div>
     </div>
@@ -1279,7 +1565,7 @@ function render(){
   <div class="card" style="max-width:500px">
     <h3>Sessão e Segurança</h3>
     <p style="font-size:14px; color:var(--muted)">${restricted?"Você desbloqueou os dados financeiros nesta sessão.":"Os dados de faturamento (Gestão) estão bloqueados por senha."}</p>
-    ${restricted?`<button class="btn danger" onclick="restricted=false; show('dashboard'); showToast('Sessão financeira encerrada.', '🔒')">Bloquear Área de Gestão</button>`:``}
+    ${restricted?`<button class="btn danger" onclick="restricted=false; show('dashboard'); showToast('Sessão financeira encerrada.', '◈')">Bloquear Área de Gestão</button>`:``}
     <hr style="border:0; border-top:1px solid var(--line); margin:20px 0">
     <h3>Dados do Sistema</h3>
     <p style="font-size:13px; color:var(--muted)">Ao resetar, as configurações originais da Vita Comunicação serão restauradas.</p>
@@ -1313,7 +1599,7 @@ function setTaskAssignee(id, resp){
   task.resp = resp;
   saveData();
   render();
-  showToast(`Responsável alterado para ${resp}.`, "👤");
+  showToast(`Responsável alterado para ${resp}.`, "○");
 }
 
 function openTaskEditor(id){
@@ -1394,7 +1680,7 @@ function setContentAssignee(id, resp){
   content.resp = resp;
   saveData();
   render();
-  showToast(`Responsável alterado para ${resp}.`, "👤");
+  showToast(`Responsável alterado para ${resp}.`, "○");
 }
 
 function openContentEditor(id){
@@ -1476,7 +1762,7 @@ function openClientEditor(id){
   if(!client) return;
 
   document.getElementById("modalBox").innerHTML = `
-    <h2>🔒 Editar cliente</h2>
+    <h2>◈ Editar cliente</h2>
     <p style="color:var(--muted);font-size:13px;margin-top:-10px">
       Para acessar os dados deste cliente, incluindo o valor mensal, digite a senha.
     </p>
@@ -1543,7 +1829,7 @@ function saveClientEditor(id){
 function deleteItem(table, id) {
   if(confirm("Tem certeza que deseja excluir?")) {
     db[table] = db[table].filter(item => item.id !== id);
-    saveData(); render(); showToast("Item removido da plataforma.", "🗑️");
+    saveData(); render(); showToast("Item removido da plataforma.", "⌫");
   }
 }
 
@@ -1685,7 +1971,7 @@ function closeModal() { document.getElementById("modal").classList.remove("show"
 function openGate() {
   // O autocomplete="off" aliado à estrutura impede a sugestão indesejada de senha do navegador.
   document.getElementById("modalBox").innerHTML = `
-    <h2>🔒 Acesso Restrito</h2>
+    <h2>◈ Acesso Restrito</h2>
     <p style="color:var(--muted); font-size:14px; margin-bottom:15px">O faturamento e dados comerciais são restritos à Diretoria.</p>
     <div class="form">
       <input id="gatePass" type="password" placeholder="Digite a senha" autofocus autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
