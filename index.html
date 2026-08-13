@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vita OS — Gestão da Vita Comunicação</title>
+<style>
+:root{
+  --bg:#f3f4f0;--surface:#ffffff;--surface-2:#eef0eb;--text:#111311;--muted:#72776f;--line:#dfe3dc;
+  --black:#0d0f0d;--moss:#4f5f43;--olive:#697858;--olive-soft:#e8ece2;--white:#fff;
+  --danger:#a8473f;--shadow:0 18px 50px rgba(17,19,17,.07);--shadow-soft:0 8px 24px rgba(17,19,17,.05);--radius:18px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased;min-width:0}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;transition:.22s ease}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--olive);outline-offset:2px}
+.app{display:flex;min-height:100vh}
+.sidebar{width:258px;background:var(--black);color:#fff;padding:24px 16px;position:fixed;inset:0 auto 0 0;z-index:50;transition:transform .3s;box-shadow:18px 0 45px rgba(0,0,0,.08)}
+.brand{font-size:24px;font-weight:850;letter-spacing:-1px;padding:6px 12px 34px;display:flex;justify-content:space-between;align-items:center}.brand span{color:#89907f;font-weight:500}.close-menu{display:none;background:transparent;color:#fff;font-size:24px;padding:0}
+.nav{display:grid;gap:5px}.nav button{background:transparent;color:#aeb3aa;text-align:left;padding:12px 13px;border-radius:11px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600}.nav button:hover{background:#1d211d;color:#fff}.nav button.active{background:#e8ece2;color:#10130f}.nav .restricted{margin-top:14px;border-top:1px solid #292d29;padding-top:18px;color:#fff}
+.main{margin-left:258px;width:calc(100% - 258px);padding:34px 42px 50px;transition:.3s}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;gap:18px}.top-left{display:flex;align-items:center;gap:16px}.menu-btn{display:none;background:var(--surface);border:1px solid var(--line);padding:9px 12px;border-radius:10px}.top h1{margin:0;font-size:31px;letter-spacing:-1.2px}.top p{margin:5px 0 0;color:var(--muted);font-size:13px}.user{display:flex;gap:11px;align-items:center;text-align:right}.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--moss);color:#fff;font-weight:800}
+.grid{display:grid;gap:18px}.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-soft)}.kpi{min-height:132px;position:relative;overflow:hidden}.kpi:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:var(--olive-soft);right:-38px;bottom:-42px}.kpi .label{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}.kpi .value{font-size:30px;font-weight:850;margin-top:10px;letter-spacing:-1.4px}.kpi .sub{font-size:12px;color:var(--muted);margin-top:5px}.two{grid-template-columns:1.35fr .9fr}.three{grid-template-columns:repeat(3,1fr)}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:26px 0 13px}.section-title h2{font-size:16px;margin:0;letter-spacing:-.3px}.btn{background:var(--black);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;font-size:12px;display:inline-flex;align-items:center;gap:7px}.btn:hover{background:var(--moss);transform:translateY(-1px)}.btn.secondary{background:var(--surface-2);color:#20241e}.btn.secondary:hover{background:#e1e5dd}.btn.danger{background:#f6e4e2;color:#8e342e}.btn.icon{padding:6px 9px;font-size:13px;background:transparent;color:var(--muted);border:1px solid transparent}.btn.icon:hover{background:#f6e4e2;color:var(--danger);border-color:#e7bbb6}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px;align-items:center}.toolbar input,.toolbar select,.form input,.form select,.form textarea{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 11px;outline:none;width:100%;font-size:13px;color:var(--text)}.toolbar input:focus,.form input:focus,.form select:focus,.form textarea:focus{border-color:var(--olive);box-shadow:0 0 0 3px rgba(79,95,67,.09)}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.table th{color:var(--muted);font-weight:750;text-transform:uppercase;font-size:10px;letter-spacing:.8px}.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;background:var(--surface-2);white-space:nowrap}.pill.good{background:#e3ebe0;color:#4d6545}.pill.warn{background:#eee9dc;color:#78633c}.pill.bad{background:#f6e4e2;color:#8e342e}.pill.blue{background:#e5e9e5;color:#4d5b52}.pill.purple{background:#ebe8df;color:#645d4c}
+.kanban{display:grid;grid-template-columns:repeat(9,minmax(230px,1fr));gap:12px;overflow-x:auto;padding-bottom:15px}.col{background:#e9ece6;border-radius:15px;padding:12px;min-height:450px;border:1px solid #dde2da}.col h3{font-size:10px;margin:4px 3px 12px;color:#687066;text-transform:uppercase;letter-spacing:.7px;display:flex;justify-content:space-between}.col h3 span{background:#dce1d9;padding:2px 7px;border-radius:10px;font-size:10px}.col.drag-over{background:#dde4d8;border:2px dashed #9da993}.content-card{background:#fff;border:1px solid var(--line);padding:14px;border-radius:13px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.035);cursor:grab;position:relative;transition:.18s}.content-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.06);border-color:#cbd1c7}.content-card:active{cursor:grabbing}.content-card .format-tag{font-size:9px;padding:3px 7px;border-radius:5px;font-weight:800;display:inline-block;margin-bottom:7px}.content-card b{font-size:13px;display:block;margin-bottom:6px;line-height:1.3}.content-card small{display:block;color:var(--muted);font-size:11px;margin-bottom:3px}.content-card .meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;border-top:1px solid var(--line);padding-top:8px}.content-card .assignee{font-size:11px;font-weight:650;color:var(--text)}.delete-btn-card{position:absolute;top:10px;right:10px;background:none;color:var(--muted);display:none;font-size:13px}.content-card:hover .delete-btn-card{display:block;color:var(--danger)}.content-card.link-active:after{content:'↗';position:absolute;bottom:10px;right:10px;font-size:11px;opacity:.45}.content-edit-bar{display:flex;gap:6px;align-items:center;margin-top:9px}.content-edit-btn{border:1px solid var(--line);background:var(--olive-soft);color:var(--moss);border-radius:8px;padding:6px 8px;font-size:10px;font-weight:800}.content-stage,.content-resp{width:100%;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 7px;font-size:10px;font-weight:700;color:var(--text)}.content-note{font-size:10px;color:var(--muted);background:#f6f7f4;border-radius:8px;padding:7px;margin-top:8px;line-height:1.35}
+.task{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line);transition:.2s}.task:last-child{border-bottom:none}.task.completed{opacity:.58}.task.completed b{text-decoration:line-through;color:var(--muted)}.check{width:18px;height:18px;margin-top:3px;cursor:pointer;accent-color:var(--moss)}.task-main{flex:1;min-width:0}.task-title-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.task-title-row b{font-size:14px}.task-note{margin:7px 0 0;padding:8px 10px;border-radius:8px;background:#f4f6f2;color:var(--muted);font-size:12px;line-height:1.45}.task-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:6px;color:var(--muted);font-size:11px}.task-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}.status-select,.assignee-select{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:9px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer}.task-edit-btn{background:var(--olive-soft);color:var(--moss);border:1px solid var(--line);border-radius:9px;padding:7px 9px;font-size:11px;font-weight:750}
+.account-switcher{background:transparent!important;color:inherit!important;display:flex;align-items:center;gap:9px;padding:5px;border-radius:12px;text-align:right}.account-switcher:hover{background:#eef1ec!important}.account-chevron{color:var(--muted);font-size:18px;margin-left:2px}.account-grid{display:grid;gap:9px;margin:16px 0}.account-option{width:100%;display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);background:#fff;border-radius:12px;text-align:left;color:var(--text)}.account-option:hover,.account-option.selected{border-color:#aebaa4;background:#f3f6ef}.account-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#e4e9df;color:var(--moss);font-weight:800}.account-option small{display:block;color:var(--muted);margin-top:2px}.account-check{margin-left:auto;color:var(--moss);font-weight:800}
+.table-link{background:none;padding:0;text-align:left;color:var(--text)}.table-link:hover{color:var(--moss);text-decoration:underline}.muted{color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(10,12,10,.58);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(7px)}.modal.show{display:flex}.modal-box{background:#fff;border-radius:20px;padding:28px;width:min(520px,92vw);max-height:88vh;overflow:auto;box-shadow:0 24px 80px rgba(0,0,0,.25)}.modal-box h2{margin:0 0 20px;font-size:21px;letter-spacing:-.5px}.form{display:grid;gap:14px}.form label{font-size:12px;color:var(--text);font-weight:750;display:grid;gap:6px}.form-actions{display:flex;gap:10px;margin-top:10px;justify-content:flex-end}
+#toast-container{position:fixed;bottom:22px;right:22px;z-index:1000;display:flex;flex-direction:column;gap:9px}.toast{background:var(--black);color:#fff;padding:12px 16px;border-radius:10px;font-size:13px;box-shadow:0 12px 28px rgba(0,0,0,.18);animation:slideIn .3s ease forwards;display:flex;align-items:center;gap:8px}@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.page{display:none;animation:fadeIn .28s ease}.page.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}.card.scroll{overflow-x:auto}
+/* Calendário */
+.calendar-shell{overflow:hidden;padding:0}.calendar-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 20px;border-bottom:1px solid var(--line);background:#fff}.calendar-title{display:flex;align-items:center;gap:12px}.calendar-title h2{margin:0;text-transform:capitalize;font-size:20px;letter-spacing:-.7px}.calendar-title span{color:var(--muted);font-size:12px}.calendar-actions{display:flex;align-items:center;gap:7px}.calendar-nav{width:36px;height:36px;border:1px solid var(--line);background:#fff;border-radius:10px;font-size:17px}.calendar-nav:hover{background:var(--olive-soft);color:var(--moss)}.calendar-today{height:36px;padding:0 12px;border-radius:10px;background:var(--black);color:#fff;font-size:11px;font-weight:800}.calendar-today:hover{background:var(--moss)}.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(110px,1fr));min-width:770px}.calendar-weekday{padding:11px 10px;background:#f5f6f3;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}.calendar-day{min-height:118px;padding:9px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff;cursor:pointer;transition:.15s}.calendar-day:hover{background:#f7f8f5}.calendar-day.empty{background:#f3f4f1;cursor:default}.calendar-day.today{box-shadow:inset 0 0 0 2px var(--moss)}.calendar-day.selected{background:#edf1e9}.day-number{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800}.today-dot{width:6px;height:6px;background:var(--moss);border-radius:50%}.event{display:block;margin-top:6px;padding:5px 7px;border-radius:7px;font-size:9px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.event.capture{background:#e9e5d8;color:#75613b}.event.task{background:#e4ebe1;color:#4d6545}.calendar-legend{display:flex;gap:14px;align-items:center;padding:13px 18px;color:var(--muted);font-size:10px;border-top:1px solid var(--line)}.legend-item{display:flex;gap:6px;align-items:center}.legend-dot{width:8px;height:8px;border-radius:3px}.legend-dot.capture{background:#75613b}.legend-dot.task{background:#4d6545}
+.day-detail{display:grid;gap:10px}.day-event{padding:12px;border:1px solid var(--line);border-radius:12px;background:#f7f8f5}.day-event strong{display:block;font-size:13px}.day-event small{display:block;color:var(--muted);margin-top:4px;font-size:11px}.empty-state{padding:18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:12px;text-align:center}
+/* Responsividade: desktop, tablet e celular (inclusive 9:16) */
+.vita-user-brand{white-space:nowrap}
+.vita-user-brand b{font-size:15px;letter-spacing:-.2px}
+
+@media(max-width:1100px){
+  .sidebar{width:220px}
+  .main{margin-left:220px;width:calc(100% - 220px);padding:24px 22px 42px}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two,.three{grid-template-columns:1fr}
+}
+
+@media(max-width:768px){
+  .sidebar{
+    transform:translateX(-100%);
+    width:270px;
+    padding:18px 14px;
+  }
+  .sidebar.open{transform:translateX(0)}
+  .close-menu{display:block}
+
+  .main{
+    margin-left:0;
+    width:100%;
+    min-width:0;
+    padding:14px 12px 30px;
+  }
+
+  .menu-btn{display:block;flex:0 0 auto}
+  .top{
+    align-items:center;
+    margin-bottom:18px;
+    gap:10px;
+  }
+  .top-left{min-width:0;gap:10px}
+  .top h1{
+    font-size:22px;
+    line-height:1.1;
+    letter-spacing:-.7px;
+  }
+  .top p{
+    font-size:11px;
+    margin-top:4px;
+  }
+  .user{display:flex;margin-left:auto}
+  .vita-user-brand b{font-size:12px}
+
+  .kpis{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+  .kpi{
+    min-height:112px;
+    padding:15px;
+  }
+  .kpi .value{font-size:24px;margin-top:7px}
+  .kpi .label{font-size:10px}
+  .kpi .sub{font-size:10px}
+
+  .card{padding:15px;border-radius:15px}
+  .section-title{margin:20px 0 10px;gap:10px}
+  .section-title h2{font-size:14px}
+
+  .toolbar{
+    align-items:stretch;
+    width:100%;
+  }
+  .toolbar > *{max-width:none!important}
+  .toolbar .btn{justify-content:center}
+  .toolbar > div{width:100%!important;flex-wrap:wrap}
+  .toolbar select,.toolbar input{flex:1 1 100%;width:100%!important}
+
+  .table{min-width:650px}
+  .card.scroll{-webkit-overflow-scrolling:touch}
+
+  .task{
+    gap:9px;
+    padding:12px 0;
+    flex-wrap:wrap;
+  }
+  .task-main{flex:1 1 calc(100% - 32px)}
+  .task-actions{
+    width:100%;
+    justify-content:flex-start;
+    padding-left:27px;
+  }
+  .status-select,.assignee-select{flex:1 1 120px}
+
+  .kanban{
+    grid-template-columns:repeat(9,minmax(205px,1fr));
+    gap:9px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .col{min-height:360px;padding:10px}
+  .content-card{padding:12px}
+
+  .calendar-head{
+    align-items:flex-start;
+    flex-direction:column;
+    padding:14px;
+  }
+  .calendar-actions{
+    width:100%;
+    justify-content:flex-end;
+  }
+  .calendar-grid{min-width:700px}
+  .calendar-day{min-height:100px}
+
+  .modal-box{
+    width:min(94vw,520px);
+    max-height:90vh;
+    padding:20px 16px;
+    border-radius:17px;
+  }
+  .form-actions{
+    flex-wrap:wrap;
+  }
+  .form-actions .btn{
+    flex:1 1 140px;
+    justify-content:center;
+  }
+
+  #toast-container{
+    left:12px;
+    right:12px;
+    bottom:12px;
+  }
+  .toast{font-size:12px}
+}
+
+@media(max-width:480px){
+  .main{padding:12px 10px 26px}
+  .top{margin-bottom:14px}
+  .top h1{font-size:20px}
+  .top p{font-size:10px}
+  .vita-user-brand b{font-size:11px}
+
+  .kpis{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi{padding:13px;min-height:105px}
+  .kpi .value{font-size:21px}
+  .kpi .sub{font-size:9px}
+
+  .two,.three{gap:10px}
+  .card{padding:13px}
+
+  .calendar-grid{min-width:680px}
+  .calendar-day{min-height:96px;padding:7px}
+  .calendar-weekday{padding:9px 7px}
+
+  .btn{padding:9px 11px;font-size:11px}
+  .content-edit-bar{flex-direction:column;align-items:stretch}
+  .content-stage,.content-resp{width:100%}
+}
+
+@media(max-width:360px){
+  .vita-user-brand{display:none}
+  .kpis{grid-template-columns:1fr}
+  .top h1{font-size:19px}
+}
+
+  .client-field.full{grid-column:auto}
+  .client-header{flex-direction:column}
+  .client-header .btn{width:100%;justify-content:center}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div>Vita <span>OS</span></div>
+    <button class="close-menu" onclick="toggleMenu()">×</button>
+  </div>
+  <div class="nav" id="nav"></div>
+</aside>
+
+<main class="main">
+  <div class="top">
+    <div class="top-left">
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
+      <div><h1 id="title">Dashboard</h1><p id="subtitle">Visão geral da operação</p></div>
+    </div>
+    <div class="user vita-user-brand" aria-label="Vita Comunicação">
+      <div><b>Vita Comunicação</b></div>
+    </div>
+  </div>
+  <div id="pages"></div>
+
+</main>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target===this) closeModal()">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+<div id="toast-container"></div>
+
+<script>
+// --- GERENCIAMENTO DE DADOS (LOCAL STORAGE V2) ---
+const defaultData = {
+  clients: [
+    {id: 1, name: "Vida e Saúde", value: 1000, services: "4 Reels, 4 cards e 2 carrosséis", resp: "Guilherme", notes: "", status: "Ativo", closingDay: "", instagram: ""},
+    {id: 2, name: "Clínica Caio Matzenbacher", value: 4000, services: "4 coberturas, 4 Reels e 20 cards", resp: "Eloize", notes: "", status: "Ativo", closingDay: "", instagram: ""},
+    {id: 3, name: "Dra. Muriel", value: 450, services: "4 edições de vídeo", resp: "Gabriel", notes: "", status: "Ativo", closingDay: "", instagram: ""},
+    {id: 4, name: "Adega Villa Borghetto", value: 750, services: "3 Reels e 4 cards", resp: "Guilherme", notes: "", status: "Ativo", closingDay: "", instagram: ""},
+    {id: 5, name: "Empório do Sabor", value: 500, services: "4 Reels com celular", resp: "Eloize", notes: "", status: "Ativo", closingDay: "", instagram: ""},
+    {id: 6, name: "Tempero Caseiro", value: 950, services: "4 Reels", resp: "Gabriel", notes: "", status: "Ativo", closingDay: "", instagram: ""},
+    {id: 7, name: "CCAR Multimarcas", value: 900, services: "2 Reels e 2 cards", resp: "Guilherme", notes: "", status: "Ativo", closingDay: "", instagram: ""},
+    {id: 8, name: "Tchê Burguer", value: 600, services: "4 Reels", resp: "Eloize", notes: "", status: "Ativo", closingDay: "", instagram: ""}
+  ],
+  team: [
+    {name: "Guilherme", role: "Gestão / Comercial", access: "Administrador"},
+    {name: "Eloize", role: "Gestão / Relacionamento", access: "Administrador"},
+    {name: "Gabriel", role: "Gestor de Processos", access: "Colaborador"},
+    {name: "Elen", role: "Edição e Design", access: "Colaborador"}
+  ],
+  contents: [
+    {id: 1, client: "Vida e Saúde", title: "Dicas de Prevenção", format: "Reel", stage: "EM EDIÇÃO", resp: "Elen", link: "", notes: ""},
+    {id: 2, client: "Clínica Caio Matzenbacher", title: "Pós-operatório", format: "Carrossel", stage: "AGUARDANDO APROVAÇÃO", resp: "Eloize", link: "drive.google.com", notes: ""},
+    {id: 3, client: "Dra. Muriel", title: "Tira dúvidas pacientes", format: "Edição de Vídeo", stage: "ROTEIRO", resp: "Gabriel", link: "", notes: ""},
+    {id: 4, client: "Adega Villa Borghetto", title: "Harmonização de Inverno", format: "Reel", stage: "CAPTADO", resp: "Guilherme", link: "", notes: ""},
+    {id: 5, client: "Tchê Burguer", title: "Lançamento Hambúrguer Duplo", format: "Card", stage: "IDEIA", resp: "Elen", link: "", notes: ""}
+  ],
+  tasks: [
+    {id: 1, title: "Revisar roteiros da Dra. Muriel", resp: "Gabriel", prio: "Alta", date: "2024-05-22", status: "A fazer"},
+    {id: 2, title: "Aprovar pacote visual Clínica Caio", resp: "Eloize", prio: "Urgente", date: "2024-05-21", status: "Em andamento"},
+    {id: 3, title: "Subir Reels da Adega no Drive", resp: "Elen", prio: "Normal", date: "2024-05-23", status: "A fazer"},
+    {id: 4, title: "Reunião de alinhamento com Tempero Caseiro", resp: "Guilherme", prio: "Normal", date: "2024-05-25", status: "A fazer"}
+  ],
+  captures: [
+    {id: 1, client: "Clínica Caio Matzenbacher", date: "2024-05-28", time: "08:00", loc: "Centro Cirúrgico", resp: "Guilherme"},
+    {id: 2, client: "Empório do Sabor", date: "2024-05-30", time: "14:30", loc: "Loja Principal", resp: "Guilherme"}
+  ]
+};
+
+// Forçando a versão 3 para carregar os clientes corretos se o usuário já tiver cache antigo
+let db = JSON.parse(localStorage.getItem('vitaOS_db_v3'));
+if (!db) { db = defaultData; }
+if (!Array.isArray(db.tasks)) db.tasks = [];
+db.tasks.forEach(t => {
+  if (!t.status) t.status = "A fazer";
+  if (typeof t.notes !== "string") t.notes = "";
+  if (!t.resp) t.resp = "Guilherme";
+});
+// Migração de dados para os novos campos do CRM.
+db.clients.forEach(c => {
+  if (typeof c.notes !== "string") c.notes = "";
+  if (!c.status) c.status = "Ativo";
+  if (c.closingDay === undefined) c.closingDay = "";
+  if (typeof c.instagram !== "string") c.instagram = "";
+});
+db.captures.forEach(c => { if (!c.resp) c.resp = "Guilherme"; });
+saveData();
+
+function saveData() {
+  localStorage.setItem('vitaOS_db_v3', JSON.stringify(db));
+}
+
+let active = "dashboard", restricted = false;
+let filterAssignee = "Todos";
+let filterClient = "Todos";
+let calendarCursor = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let calendarSelected = null;
+
+const ACCOUNT_KEY = "vitaOS_current_user_v3";
+const VALID_USERS = ["Guilherme", "Eloize", "Elen", "Gabriel"];
+let currentUserName = localStorage.getItem(ACCOUNT_KEY) || "Guilherme";
+if (!VALID_USERS.includes(currentUserName)) currentUserName = "Guilherme";
+
+function getCurrentUser(){
+  return db.team.find(u => u.name === currentUserName) || db.team[0];
+}
+
+function updateCurrentUserUI(){
+  const u = getCurrentUser();
+  const name = document.getElementById("currentUser");
+  const role = document.getElementById("currentRole");
+  const avatar = document.getElementById("currentAvatar");
+  if(name) name.textContent = u.name;
+  if(role) role.textContent = u.role;
+  if(avatar) avatar.textContent = u.name.charAt(0);
+}
+
+function openAccountSwitcher(){
+  const box = document.getElementById("modalBox");
+  box.innerHTML = `
+    <h2>Trocar conta</h2>
+    <p style="color:var(--muted);font-size:14px;margin-top:-8px">
+      Selecione quem está entrando no Vita OS.
+    </p>
+    <div class="account-grid">
+      ${db.team.map(u => `
+        <button type="button" class="account-option ${u.name===currentUserName?'selected':''}"
+          onclick="loginAs('${u.name}')">
+          <span class="account-avatar">${u.name.charAt(0)}</span>
+          <span><b>${u.name}</b><small>${u.role}</small></span>
+          ${u.name===currentUserName ? '<span class="account-check">✓</span>' : ''}
+        </button>
+      `).join("")}
+    </div>
+    <div class="form-actions">
+      <button class="btn secondary" type="button" onclick="closeModal()">Cancelar</button>
+    </div>`;
+  document.getElementById("modal").classList.add("show");
+}
+
+function loginAs(name){
+  if(!VALID_USERS.includes(name)) return;
+  currentUserName = name;
+  localStorage.setItem(ACCOUNT_KEY, name);
+  restricted = false;
+  closeModal();
+  updateCurrentUserUI();
+  render();
+  showToast(`Conta alterada para ${name}.`, "👤");
+}
+
+// --- FUNÇÕES UTILITÁRIAS ---
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+  }[ch]));
+}
+function money(v){ return Number(v).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}) }
+function showToast(msg, icon="✅") {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<span>${icon}</span> ${msg}`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(()=>toast.remove(), 300); }, 3000);
+}
+function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
+function generateId() { return Math.floor(Math.random() * 1000000); }
+function formatDateBR(dateString) {
+  if(!dateString) return "Sem data";
+  const [y, m, d] = dateString.split('-');
+  return `${d}/${m}/${y}`;
+}
+function getFormatColor(format) {
+  const colors = { "Reel": "purple", "Card": "blue", "Carrossel": "warn", "Edição de Vídeo": "good" };
+  return colors[format] || "good";
+}
+
+// --- NAVEGAÇÃO ---
+function nav(){
+  const items = [
+    ["dashboard","Dashboard","📊"], ["clientes","Clientes","👥"], 
+    ["conteudos","Conteúdos & Fluxo","📱"], ["calendario","Calendário","📅"], 
+    ["captacoes","Captações","🎥"], ["tarefas","Tarefas","✅"], 
+    ["equipe","Equipe","👤"], ["relatorios","Relatórios","📈"], 
+    ["gestao","Gestão Comercial","💰"], ["config","Configurações","⚙️"]
+  ];
+  document.getElementById("nav").innerHTML = items.map(([id, label, icon]) => {
+    if(id === "gestao" && !restricted) return `<button class="restricted" onclick="openGate()">🔒 ${label}</button>`;
+    if(id === "gestao" && restricted) return `<button class="restricted ${active===id?'active':''}" onclick="show('gestao')">🔓 ${label}</button>`;
+    return `<button class="${active===id?'active':''}" onclick="show('${id}')"><span>${icon} &nbsp; ${label}</span></button>`;
+  }).join("");
+}
+
+function show(id){
+  if(id === "gestao" && !restricted) { openGate(); return; }
+  active = id; 
+  document.getElementById("title").textContent = id === "gestao" ? "Gestão Comercial" : id.charAt(0).toUpperCase() + id.slice(1);
+  document.getElementById("subtitle").textContent = id === "gestao" ? "Área restrita de faturamento" : "Operação da agência";
+  if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+  render();
+}
+
+
+function localDateKey(date){
+  const y=date.getFullYear(); const m=String(date.getMonth()+1).padStart(2,'0'); const d=String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+function changeCalendarMonth(delta){
+  calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() + Number(delta), 1);
+  calendarSelected = null;
+  if(active !== "calendario") active = "calendario";
+  render();
+}
+function goCalendarToday(){
+  const now = new Date();
+  calendarCursor = new Date(now.getFullYear(), now.getMonth(), 1);
+  calendarSelected = localDateKey(now);
+  render();
+}
+function openCalendarDay(key){
+  calendarSelected = key;
+  const captures = db.captures.filter(c=>c.date===key);
+  const tasks = db.tasks.filter(t=>t.date===key);
+  let html = `<h2>Agenda de ${formatDateBR(key)}</h2>`;
+  html += `<p style="color:var(--muted);font-size:13px">${captures.length + tasks.length} evento(s) neste dia.</p>`;
+  if(!captures.length && !tasks.length) html += `<div class="card" style="background:var(--surface-2);box-shadow:none"><p style="margin:0;color:var(--muted)">Nenhum evento cadastrado para este dia.</p></div>`;
+  if(captures.length) html += `<h3 style="margin:18px 0 8px">🎥 Captações</h3>${captures.map(c=>`<div class="task"><div>🎥</div><div><b>${escapeHTML(c.client)}</b><small style="display:block;color:var(--muted)">${escapeHTML(c.time||'Sem horário')} · ${escapeHTML(c.loc||'Sem local')}<br>Responsável: ${escapeHTML(c.resp||'—')}</small></div></div>`).join('')}`;
+  if(tasks.length) html += `<h3 style="margin:18px 0 8px">✅ Tarefas</h3>${tasks.map(t=>`<div class="task"><div>✓</div><div><b>${escapeHTML(t.title)}</b><small style="display:block;color:var(--muted)">${escapeHTML(t.status||'A fazer')} · Responsável: ${escapeHTML(t.resp||'—')}</small></div></div>`).join('')}`;
+  html += `<div class="form-actions"><button class="btn secondary" onclick="closeModal()">Fechar</button></div>`;
+  document.getElementById('modalBox').innerHTML=html;
+  document.getElementById('modal').classList.add('show');
+}
+
+// --- RENDERIZAÇÃO DAS PÁGINAS ---
+function page(id, html){ return `<section class="page ${active===id?'active':''}" id="p-${id}">${html}</section>`; }
+
+function render(){
+  nav();
+  let out = "";
+  const k = (label, value, sub) => `<div class="card kpi"><div class="label">${label}</div><div class="value">${value}</div><div class="sub">${sub}</div></div>`;
+  
+  // Dashboard
+  const activeTasks = db.tasks.filter(t => t.status !== "Concluída");
+  out += page("dashboard", `
+  <div class="grid kpis">
+    ${k("Clientes Ativos", db.clients.length, "contratos recorrentes")}
+    ${k("Conteúdos em Fluxo", db.contents.length, "em todas as etapas")}
+    ${k("Aguardando Aprovação", db.contents.filter(c=>c.stage==="AGUARDANDO APROVAÇÃO").length, "fale com o cliente")}
+    ${k("Próx. Captações", db.captures.length, "agendadas")}
+  </div>
+  <div class="grid two" style="margin-top:20px">
+    <div class="card">
+      <div class="section-title" style="margin-top:0"><h2>Atenção da Equipe (Tarefas)</h2><button class="btn secondary" onclick="show('tarefas')">Ver todas</button></div>
+      ${activeTasks.slice(0,5).map(t => `
+        <div class="task">
+          <input class="check" type="checkbox" onchange="toggleTaskStatus(${t.id})" ${t.status==="Concluída"?"checked":""}>
+          <div class="task-main">
+            <div class="task-title-row"><b>${t.title}</b></div>
+            <div class="task-meta">👤 ${t.resp} · 📅 Prazo: ${formatDateBR(t.date)}</div>
+            ${t.notes ? `<div class="task-note">📝 ${escapeHTML(t.notes)}</div>` : ""}
+          </div>
+          <span class="pill ${t.prio==="Urgente"?"bad":t.prio==="Alta"?"warn":""}">${t.prio}</span>
+        </div>`).join("") || '<p class="muted">Nenhuma tarefa pendente.</p>'}
+    </div>
+    <div class="card">
+      <div class="section-title" style="margin-top:0"><h2>Próximas Captações</h2></div>
+      ${db.captures.slice(0,3).map(c => `
+        <div class="task"><div>🎥</div><div style="flex:1"><b>${c.client}</b><small style="display:block;color:var(--muted)">${formatDateBR(c.date)} às ${c.time}<br>📍 ${c.loc}</small></div></div>
+      `).join("") || '<p class="muted" style="font-size:13px">Nenhuma captação agendada. Acompanhe com o Gabriel.</p>'}
+    </div>
+  </div>`);
+
+  // Clientes — cada cliente abre uma ficha interativa de CRM
+  out += page("clientes", `
+  <div class="toolbar">
+    <input placeholder="Buscar cliente..." oninput="filterTable('clientTable', this.value)" style="max-width:300px">
+    <button class="btn" onclick="openModal('client')">+ Novo Cliente</button>
+  </div>
+  <div class="card scroll">
+    <table class="table" id="clientTable">
+      <thead><tr><th>Cliente</th><th>Atendimento</th><th>Contrato</th><th>Situação</th><th>Instagram</th><th>Ação</th></tr></thead>
+      <tbody>
+        ${db.clients.map(c => `<tr>
+          <td><button class="table-link" type="button" onclick="openClientEditor(${c.id})"><b>${escapeHTML(c.name)}</b></button></td>
+          <td>${escapeHTML(c.resp || "—")}</td>
+          <td>${escapeHTML(c.services || "—")}</td>
+          <td><span class="pill ${c.status==='Ativo'?'good':c.status==='Pausado'?'warn':'bad'}">${escapeHTML(c.status || 'Ativo')}</span></td>
+          <td>${c.instagram ? `<span class="muted">@${escapeHTML(c.instagram.replace(/^@/,''))}</span>` : '<span class="muted">—</span>'}</td>
+          <td><button class="btn icon" onclick="openClientEditor(${c.id})" title="Editar cliente">✎</button> <button class="btn icon" onclick="deleteItem('clients', ${c.id})" title="Excluir">🗑️</button></td>
+        </tr>`).join("")}
+      </tbody>
+    </table>
+  </div>`);
+
+  // Conteúdos (Kanban) - Otimizado para Agência
+  const stages = ["IDEIA", "ROTEIRO", "AGUARDANDO CAPTAÇÃO", "CAPTADO", "EM EDIÇÃO", "REVISÃO INTERNA", "AGUARDANDO APROVAÇÃO", "APROVADO", "AGENDADO"];
+  
+  // Lógica de Filtro
+  const filteredContents = db.contents.filter(c =>
+    (filterClient === "Todos" || c.client === filterClient) &&
+    (filterAssignee === "Todos" || c.resp === filterAssignee)
+  );
+
+  out += page("conteudos", `
+  <div class="toolbar" style="justify-content: space-between">
+    <div style="display:flex; gap:9px; align-items:center;">
+      <button class="btn" onclick="openModal('content')">+ Novo Conteúdo</button>
+      <select style="max-width:220px" onchange="filterClient = this.value; render()">${["Todos", ...db.clients.map(c=>c.name)].map(name=>`<option value="${escapeHTML(name)}" ${filterClient===name?"selected":""}>${name==="Todos"?"Todos os clientes":escapeHTML(name)}</option>`).join("")}</select>
+    </div>
+    <div style="display:flex; gap:9px; align-items:center;">
+      <span style="font-size:13px; font-weight:600; color:var(--muted)">Filtro:</span>
+      <select onchange="filterAssignee = this.value; render()" style="padding:6px 10px; border-radius:6px;">
+        <option value="Todos" ${filterAssignee==="Todos"?"selected":""}>Equipe Inteira</option>
+        ${db.team.map(t => `<option value="${t.name}" ${filterAssignee===t.name?"selected":""}>${t.name}</option>`).join("")}
+      </select>
+    </div>
+  </div>
+  <div class="kanban">
+    ${stages.map(s => `
+      <div class="col" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondrop="dropContent(event, '${s}')">
+        <h3>${s} <span>${filteredContents.filter(c=>c.stage===s).length}</span></h3>
+        ${filteredContents.filter(c => c.stage === s).map(c => `
+          <div class="content-card ${c.link ? 'link-active' : ''}" draggable="true" ondragstart="dragStart(event, ${c.id})" ondblclick="openContentEditor(${c.id})">
+            <button class="delete-btn-card" onclick="event.stopPropagation(); deleteItem('contents', ${c.id})" title="Excluir">✖</button>
+            <span class="format-tag pill ${getFormatColor(c.format)}">${escapeHTML(c.format)}</span>
+            <b>${escapeHTML(c.title)}</b>
+            <small>🏢 ${escapeHTML(c.client)}</small>
+            ${c.notes ? `<div class="content-note">📝 ${escapeHTML(c.notes)}</div>` : ""}
+            <div class="content-edit-bar">
+              <select class="content-stage" onclick="event.stopPropagation()" onchange="setContentStage(${c.id}, this.value)">
+                ${stages.map(st=>`<option value="${st}" ${c.stage===st?"selected":""}>${st}</option>`).join("")}
+              </select>
+              <select class="content-resp" onclick="event.stopPropagation()" onchange="setContentAssignee(${c.id}, this.value)">
+                ${db.team.map(u=>`<option value="${u.name}" ${c.resp===u.name?"selected":""}>${u.name}</option>`).join("")}
+              </select>
+            </div>
+            <div class="meta">
+              <span class="assignee">👤 ${escapeHTML(c.resp)}</span>
+              <button type="button" class="content-edit-btn" onclick="event.stopPropagation(); openContentEditor(${c.id})">✎ Editar</button>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    `).join("")}
+  </div>`);
+
+  // Calendário interativo
+  const calYear = calendarCursor.getFullYear();
+  const calMonth = calendarCursor.getMonth();
+  const monthName = calendarCursor.toLocaleString('pt-BR', { month:'long', year:'numeric' });
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const offset = firstDay === 0 ? 6 : firstDay - 1;
+  const todayKey = localDateKey(new Date());
+  let calHTML = '';
+  for(let i=0;i<offset;i++) calHTML += '<div class="calendar-day empty"></div>';
+  for(let day=1; day<=daysInMonth; day++) {
+    const key = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const captures = db.captures.filter(c => c.date === key);
+    const tasks = db.tasks.filter(t => t.date === key);
+    const isToday = key === todayKey;
+    const selected = key === calendarSelected;
+    const events = [
+      ...captures.map(c => `<div class="event capture">● ${escapeHTML(c.time || 'Captação')} · ${escapeHTML(c.client)}</div>`),
+      ...tasks.map(t => `<div class="event task">✓ ${escapeHTML(t.title)}</div>`)
+    ];
+    calHTML += `<div class="calendar-day ${isToday?'today':''} ${selected?'selected':''}" onclick="openCalendarDay('${key}')">
+      <div class="day-number"><span>${day}</span>${isToday?'<span class="today-dot"></span>':''}</div>${events.slice(0,3).join('')}${events.length>3?`<div style="margin-top:5px;font-size:9px;color:var(--muted);font-weight:800">+${events.length-3} eventos</div>`:''}
+    </div>`;
+  }
+  const totalEvents = db.captures.filter(c=>c.date.startsWith(`${calYear}-${String(calMonth+1).padStart(2,'0')}`)).length + db.tasks.filter(t=>t.date.startsWith(`${calYear}-${String(calMonth+1).padStart(2,'0')}`)).length;
+  out += page("calendario", `
+  <div class="card calendar-shell">
+    <div class="calendar-head">
+      <div class="calendar-title"><h2>${monthName}</h2><span>${totalEvents} evento${totalEvents===1?'':'s'} no mês</span></div>
+      <div class="calendar-actions">
+        <button class="calendar-today" onclick="goCalendarToday()">Hoje</button>
+        <button class="calendar-nav" onclick="changeCalendarMonth(-1)" aria-label="Mês anterior">‹</button>
+        <button class="calendar-nav" onclick="changeCalendarMonth(1)" aria-label="Próximo mês">›</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto"><div class="calendar-grid">
+      ${["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"].map(x=>`<div class="calendar-weekday">${x}</div>`).join('')}
+      ${calHTML}
+    </div></div>
+    <div class="calendar-legend">
+      <span class="legend-item"><i class="legend-dot capture"></i> Captação</span>
+      <span class="legend-item"><i class="legend-dot task"></i> Tarefa</span>
+      <span style="margin-left:auto">Clique em um dia para ver os detalhes.</span>
+    </div>
+  </div>`);
+
+  // Captações
+  out += page("captacoes", `
+  <div class="toolbar"><button class="btn" onclick="openModal('capture')">+ Agendar Captação</button></div>
+  <div class="grid three">
+    ${db.captures.map(c => `
+      <div class="card">
+        <span class="pill warn" style="float:right">Agendada</span>
+        <h3 style="margin-top:0">${c.client}</h3>
+        <p style="color:var(--muted); font-size:14px; margin:5px 0">📅 ${formatDateBR(c.date)} às ${c.time}</p>
+        <p style="font-size:14px; margin:5px 0">📍 ${escapeHTML(c.loc)}</p>
+        <p style="font-size:13px;color:var(--muted);margin:7px 0">👤 Responsável: <b>${escapeHTML(c.resp || "—")}</b></p>
+        <div style="margin-top:15px; display:flex; gap:5px">
+           <button class="btn icon danger" onclick="deleteItem('captures', ${c.id})">Cancelar</button>
+        </div>
+      </div>`).join("") || '<p class="muted">Nenhuma captação registrada.</p>'}
+  </div>`);
+
+  // Tarefas (Visão de Processos)
+  out += page("tarefas", `
+  <div class="toolbar" style="justify-content:space-between">
+    <div>
+      <button class="btn" onclick="openModal('task')">+ Nova Tarefa</button>
+    </div>
+    <div style="color:var(--muted);font-size:12px">
+      Altere status e responsável diretamente em cada tarefa.
+    </div>
+  </div>
+  <div class="card">
+    ${db.tasks.map(t => `
+      <div class="task ${t.status==='Concluída'?'completed':''}">
+        <input class="check" type="checkbox" onchange="toggleTaskStatus(${t.id})" ${t.status==="Concluída"?"checked":""}>
+        <div class="task-main">
+          <div class="task-title-row">
+            <b>${escapeHTML(t.title)}</b>
+            <span class="pill ${t.prio==="Urgente"?"bad":t.prio==="Alta"?"warn":""}">${t.prio}</span>
+          </div>
+          <div class="task-meta">👤 ${t.resp} · 📅 Prazo: ${formatDateBR(t.date)}</div>
+          ${t.notes ? `<div class="task-note">📝 ${escapeHTML(t.notes)}</div>` : `<div class="task-meta">Sem observações</div>`}
+        </div>
+        <div class="task-actions">
+          <select class="status-select" onchange="setTaskStatus(${t.id}, this.value)" title="Alterar situação">
+            ${TASK_STATUSES.map(st=>`<option value="${st}" ${t.status===st?"selected":""}>${st}</option>`).join("")}
+          </select>
+          <select class="assignee-select" onchange="setTaskAssignee(${t.id}, this.value)" title="Trocar responsável">
+            ${db.team.map(u=>`<option value="${u.name}" ${t.resp===u.name?"selected":""}>${u.name}</option>`).join("")}
+          </select>
+          <button type="button" class="task-edit-btn" onclick="openTaskEditor(${t.id})">✎ Editar</button>
+          <button type="button" class="btn icon" onclick="deleteItem('tasks', ${t.id})" title="Excluir">🗑️</button>
+        </div>
+      </div>`).join("") || '<p class="muted">Nenhuma tarefa no sistema.</p>'}
+  </div>`);
+
+  // Equipe
+  out += page("equipe", `
+  <div class="grid three">
+    ${db.team.map(t => `
+      <div class="card text-center" style="text-align:center">
+        <div class="avatar" style="margin: 0 auto 15px; width:60px; height:60px; font-size:24px">${t.name[0]}</div>
+        <h3 style="margin:0">${t.name}</h3>
+        <p style="color:var(--muted); font-size:13px">${t.role}</p>
+        <span class="pill ${t.access==="Administrador"?"good":"blue"}">${t.access}</span>
+      </div>`).join("")}
+  </div>`);
+
+  // Relatórios
+  out += page("relatorios", `
+  <div class="grid two">
+    <div class="card">
+      <h3>Produtividade da Equipe</h3>
+      <table class="table">
+        <tr><td>Conteúdos em Produção</td><td><b>${db.contents.filter(c=>c.stage!=='AGENDADO').length}</b></td></tr>
+        <tr><td>Captações no Mês</td><td><b>${db.captures.length}</b></td></tr>
+        <tr><td>Tarefas Pendentes</td><td><b>${db.tasks.filter(t=>t.status!=='Concluída').length}</b></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Relatório por Cliente</h3>
+      <p style="color:var(--muted); font-size:14px">Gere um PDF de aprovação ou relatório de métricas para enviar ao cliente.</p>
+      <select style="width:100%; margin:10px 0" id="relClient">
+        ${db.clients.map(c=>`<option>${c.name}</option>`).join("")}
+      </select>
+      <div style="display:flex; gap:10px;">
+        <button class="btn secondary" onclick="showToast('Link de aprovação copiado!', '🔗')">Copiar Link de Aprovação</button>
+        <button class="btn" onclick="showToast('Relatório gerado com sucesso!', '📄')">Baixar PDF</button>
+      </div>
+    </div>
+  </div>`);
+
+  // Gestão Financeira (Restrita)
+  if(restricted) {
+    const mrr = db.clients.reduce((acc, curr) => acc + Number(curr.value), 0);
+    out += page("gestao", `
+    <div class="grid kpis">
+      ${k("MRR (Faturamento)", money(mrr), "Mensal Recorrente bruto")} 
+      ${k("Ticket Médio", money(mrr/db.clients.length || 0), "por cliente ativo")} 
+      ${k("Custos Fixos Prev.", money(2800), "sistemas, equipamentos e taxas")} 
+      ${k("Saldo Estimado", money(mrr - 2800), "antes de repasses de equipe")}
+    </div>
+    <div class="card scroll" style="margin-top:20px">
+      <h3>Contratos Ativos (Valores)</h3>
+      <table class="table">
+        <thead><tr><th>Cliente</th><th>Escopo</th><th>Valor Mensal</th><th>Status do Pgto</th></tr></thead>
+        <tbody>
+          ${db.clients.sort((a,b)=>b.value-a.value).map(c=>`<tr><td>${c.name}</td><td><span style="font-size:11px;color:var(--muted)">${c.services}</span></td><td><b>${money(c.value)}</b></td><td><span class="pill good">Em dia</span></td></tr>`).join("")}
+        </tbody>
+      </table>
+    </div>`);
+  }
+
+  out += page("config", `
+  <div class="card" style="max-width:500px">
+    <h3>Sessão e Segurança</h3>
+    <p style="font-size:14px; color:var(--muted)">${restricted?"Você desbloqueou os dados financeiros nesta sessão.":"Os dados de faturamento (Gestão) estão bloqueados por senha."}</p>
+    ${restricted?`<button class="btn danger" onclick="restricted=false; show('dashboard'); showToast('Sessão financeira encerrada.', '🔒')">Bloquear Área de Gestão</button>`:``}
+    <hr style="border:0; border-top:1px solid var(--line); margin:20px 0">
+    <h3>Dados do Sistema</h3>
+    <p style="font-size:13px; color:var(--muted)">Ao resetar, as configurações originais da Vita Comunicação serão restauradas.</p>
+    <button class="btn danger" onclick="if(confirm('Tem certeza? Isso apaga tudo e volta aos dados padrão da agência.')){localStorage.removeItem('vitaOS_db_v3'); location.reload();}">Restaurar Dados Padrão</button>
+  </div>`);
+
+  document.getElementById("pages").innerHTML = out;
+}
+
+// --- FUNÇÕES DE AÇÃO (CRUD) ---
+const TASK_STATUSES = ["A fazer","Em andamento","Em revisão","Concluída"];
+
+function setTaskStatus(id, status){
+  const task = db.tasks.find(t => t.id === id);
+  if(!task || !TASK_STATUSES.includes(status)) return;
+  task.status = status;
+  saveData();
+  render();
+  showToast(`Situação alterada para "${status}".`, status==="Concluída" ? "✓" : "↻");
+}
+
+function toggleTaskStatus(id){
+  const task = db.tasks.find(t => t.id === id);
+  if(!task) return;
+  setTaskStatus(id, task.status === "Concluída" ? "A fazer" : "Concluída");
+}
+
+function setTaskAssignee(id, resp){
+  const task = db.tasks.find(t => t.id === id);
+  if(!task) return;
+  task.resp = resp;
+  saveData();
+  render();
+  showToast(`Responsável alterado para ${resp}.`, "👤");
+}
+
+function openTaskEditor(id){
+  const task = db.tasks.find(t => t.id === id);
+  if(!task) return;
+
+  document.getElementById("modalBox").innerHTML = `
+    <h2>Editar tarefa</h2>
+    <div class="form">
+      <label>Tarefa
+        <input id="editTaskTitle" type="text" value="${escapeHTML(task.title)}">
+      </label>
+      <label>Situação atual
+        <select id="editTaskStatus">
+          ${TASK_STATUSES.map(st=>`<option value="${st}" ${task.status===st?"selected":""}>${st}</option>`).join("")}
+        </select>
+      </label>
+      <label>Responsável
+        <select id="editTaskResp">
+          ${db.team.map(u=>`<option value="${u.name}" ${task.resp===u.name?"selected":""}>${u.name}</option>`).join("")}
+        </select>
+      </label>
+      <label>Prazo
+        <input id="editTaskDate" type="date" value="${task.date || ""}">
+      </label>
+      <label>Prioridade
+        <select id="editTaskPrio">
+          ${["Normal","Alta","Urgente"].map(p=>`<option value="${p}" ${task.prio===p?"selected":""}>${p}</option>`).join("")}
+        </select>
+      </label>
+      <label>Observações
+        <textarea id="editTaskNotes" rows="5" placeholder="Ex.: aguardar retorno do cliente, referência, detalhe da execução...">${escapeHTML(task.notes || "")}</textarea>
+      </label>
+      <div class="form-actions">
+        <button class="btn secondary" type="button" onclick="closeModal()">Cancelar</button>
+        <button class="btn" type="button" onclick="saveTaskEditor(${id})">Salvar alterações</button>
+      </div>
+    </div>`;
+  document.getElementById("modal").classList.add("show");
+}
+
+function saveTaskEditor(id){
+  const task = db.tasks.find(t => t.id === id);
+  if(!task) return;
+
+  const title = document.getElementById("editTaskTitle").value.trim();
+  if(!title){
+    alert("Informe o nome da tarefa.");
+    return;
+  }
+
+  task.title = title;
+  task.status = document.getElementById("editTaskStatus").value;
+  task.resp = document.getElementById("editTaskResp").value;
+  task.date = document.getElementById("editTaskDate").value;
+  task.prio = document.getElementById("editTaskPrio").value;
+  task.notes = document.getElementById("editTaskNotes").value.trim();
+
+  saveData();
+  closeModal();
+  render();
+  showToast("Tarefa atualizada com sucesso.", "✓");
+}
+
+
+function setContentStage(id, stage){
+  const content = db.contents.find(c => c.id === id);
+  if(!content) return;
+  content.stage = stage;
+  saveData();
+  render();
+  showToast(`Conteúdo movido para "${stage}".`, "↻");
+}
+
+function setContentAssignee(id, resp){
+  const content = db.contents.find(c => c.id === id);
+  if(!content) return;
+  content.resp = resp;
+  saveData();
+  render();
+  showToast(`Responsável alterado para ${resp}.`, "👤");
+}
+
+function openContentEditor(id){
+  const content = db.contents.find(c => c.id === id);
+  if(!content) return;
+
+  const stages = ["IDEIA","ROTEIRO","AGUARDANDO CAPTAÇÃO","CAPTADO","EM EDIÇÃO","REVISÃO INTERNA","AGUARDANDO APROVAÇÃO","APROVADO","AGENDADO"];
+
+  document.getElementById("modalBox").innerHTML = `
+    <h2>Editar conteúdo</h2>
+    <p style="color:var(--muted);font-size:13px;margin-top:-10px">
+      Altere as informações do conteúdo sem precisar recriar o card.
+    </p>
+    <div class="form">
+      <label>Título / Tema
+        <input id="editContentTitle" type="text" value="${escapeHTML(content.title)}">
+      </label>
+      <label>Cliente
+        <select id="editContentClient">
+          ${db.clients.map(c=>`<option value="${escapeHTML(c.name)}" ${content.client===c.name?"selected":""}>${escapeHTML(c.name)}</option>`).join("")}
+        </select>
+      </label>
+      <label>Formato
+        <select id="editContentFormat">
+          ${["Reel","Card","Carrossel","Edição de Vídeo","Stories"].map(f=>`<option value="${f}" ${content.format===f?"selected":""}>${f}</option>`).join("")}
+        </select>
+      </label>
+      <label>Situação / Etapa
+        <select id="editContentStage">
+          ${stages.map(st=>`<option value="${st}" ${content.stage===st?"selected":""}>${st}</option>`).join("")}
+        </select>
+      </label>
+      <label>Responsável
+        <select id="editContentResp">
+          ${db.team.map(u=>`<option value="${u.name}" ${content.resp===u.name?"selected":""}>${u.name}</option>`).join("")}
+        </select>
+      </label>
+      <label>Link de referência / Drive
+        <input id="editContentLink" type="text" value="${escapeHTML(content.link || "")}" placeholder="https://...">
+      </label>
+      <label>Observações
+        <textarea id="editContentNotes" rows="5" placeholder="Briefing, alterações solicitadas, pendências, referências...">${escapeHTML(content.notes || "")}</textarea>
+      </label>
+      <div class="form-actions">
+        <button class="btn secondary" type="button" onclick="closeModal()">Cancelar</button>
+        <button class="btn" type="button" onclick="saveContentEditor(${id})">Salvar alterações</button>
+      </div>
+    </div>`;
+  document.getElementById("modal").classList.add("show");
+}
+
+function saveContentEditor(id){
+  const content = db.contents.find(c => c.id === id);
+  if(!content) return;
+
+  const title = document.getElementById("editContentTitle").value.trim();
+  if(!title){
+    alert("Informe o título do conteúdo.");
+    return;
+  }
+
+  content.title = title;
+  content.client = document.getElementById("editContentClient").value;
+  content.format = document.getElementById("editContentFormat").value;
+  content.stage = document.getElementById("editContentStage").value;
+  content.resp = document.getElementById("editContentResp").value;
+  content.link = document.getElementById("editContentLink").value.trim();
+  content.notes = document.getElementById("editContentNotes").value.trim();
+
+  saveData();
+  closeModal();
+  render();
+  showToast("Conteúdo atualizado com sucesso.", "✓");
+}
+
+
+function openClientEditor(id){
+  const client = db.clients.find(c => c.id === id);
+  if(!client) return;
+
+  document.getElementById("modalBox").innerHTML = `
+    <h2>🔒 Editar cliente</h2>
+    <p style="color:var(--muted);font-size:13px;margin-top:-10px">
+      Para acessar os dados deste cliente, incluindo o valor mensal, digite a senha.
+    </p>
+    <div class="form">
+      <input id="clientEditPassword" type="password" placeholder="Digite a senha"
+             autocomplete="off" inputmode="numeric" maxlength="20"
+             onkeydown="if(event.key==='Enter') confirmClientEditPassword(${id})">
+      <div id="clientEditPasswordError" style="min-height:18px;color:#a8473f;font-size:12px;font-weight:700"></div>
+      <div class="form-actions">
+        <button class="btn secondary" type="button" onclick="closeModal()">Cancelar</button>
+        <button class="btn" type="button" onclick="confirmClientEditPassword(${id})">Entrar</button>
+      </div>
+    </div>`;
+  document.getElementById("modal").classList.add("show");
+  setTimeout(() => document.getElementById("clientEditPassword")?.focus(), 80);
+}
+
+function confirmClientEditPassword(id){
+  const input = document.getElementById("clientEditPassword");
+  const error = document.getElementById("clientEditPasswordError");
+
+  if(input && input.value === "1007"){
+    closeModal();
+    openClientEditorUnlocked(id);
+    return;
+  }
+
+  if(error) error.textContent = "Senha incorreta.";
+  if(input){
+    input.value = "";
+    input.focus();
+  }
+}
+
+function openClientEditorUnlocked(id){
+  const client = db.clients.find(c=>c.id===id);
+  if(!client) return;
+  document.getElementById('modalBox').innerHTML = `
+    <h2>Ficha do cliente</h2>
+    <p style="color:var(--muted);font-size:13px;margin-top:-10px">Atualize os dados comerciais e operacionais deste cliente.</p>
+    <div class="form">
+      <label>Cliente / Marca<input id="editClientName" value="${escapeHTML(client.name)}"></label>
+      <label>Valor mensal (R$)<input id="editClientValue" type="number" value="${escapeHTML(client.value)}"></label>
+      <label>Escopo de serviços<input id="editClientServices" value="${escapeHTML(client.services||'')}"></label>
+      <label>Responsável pelo atendimento<select id="editClientResp">${db.team.map(u=>`<option value="${escapeHTML(u.name)}" ${client.resp===u.name?'selected':''}>${escapeHTML(u.name)}</option>`).join('')}</select></label>
+      <label>Situação<select id="editClientStatus">${['Ativo','Pausado','Encerrado','Prospect'].map(st=>`<option value="${st}" ${client.status===st?'selected':''}>${st}</option>`).join('')}</select></label>
+      <label>Dia do fechamento do contrato<input id="editClientClosingDay" type="number" min="1" max="31" value="${escapeHTML(client.closingDay||'')}" placeholder="Ex: 10"></label>
+      <label>Instagram / @<input id="editClientInstagram" value="${escapeHTML(client.instagram||'')}" placeholder="@cliente"></label>
+      <label>Observações<textarea id="editClientNotes" rows="6" placeholder="Informações importantes...">${escapeHTML(client.notes||'')}</textarea></label>
+      <div class="form-actions"><button class="btn secondary" onclick="closeModal()">Cancelar</button><button class="btn" onclick="saveClientEditor(${id})">Salvar alterações</button></div>
+    </div>`;
+  document.getElementById('modal').classList.add('show');
+}
+function saveClientEditor(id){
+  const client=db.clients.find(c=>c.id===id); if(!client) return;
+  const name=document.getElementById('editClientName').value.trim();
+  if(!name){ alert('Informe o nome do cliente.'); return; }
+  const day=document.getElementById('editClientClosingDay').value.trim();
+  if(day && (Number(day)<1 || Number(day)>31)){ alert('O dia de fechamento deve estar entre 1 e 31.'); return; }
+  client.name=name; client.value=document.getElementById('editClientValue').value; client.services=document.getElementById('editClientServices').value.trim(); client.resp=document.getElementById('editClientResp').value; client.status=document.getElementById('editClientStatus').value; client.closingDay=day; client.instagram=document.getElementById('editClientInstagram').value.trim().replace(/^@+/,''); client.notes=document.getElementById('editClientNotes').value.trim();
+  saveData(); closeModal(); render(); showToast('Cliente atualizado com sucesso.','✓');
+}
+
+function deleteItem(table, id) {
+  if(confirm("Tem certeza que deseja excluir?")) {
+    db[table] = db[table].filter(item => item.id !== id);
+    saveData(); render(); showToast("Item removido da plataforma.", "🗑️");
+  }
+}
+
+function filterTable(tableId, value) {
+  const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+  rows.forEach(r => {
+    r.style.display = r.innerText.toLowerCase().includes(value.toLowerCase()) ? "" : "none";
+  });
+}
+
+// --- DRAG AND DROP (KANBAN) ---
+function dragStart(e, id) { e.dataTransfer.setData('text/plain', id); }
+function allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function dropContent(e, stage) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const id = Number(e.dataTransfer.getData('text/plain'));
+  const content = db.contents.find(c => c.id === id);
+  if(content && content.stage !== stage) {
+    content.stage = stage;
+    saveData(); render();
+  }
+}
+
+// --- SISTEMA DE MODAIS (FORMULÁRIOS DINÂMICOS) ---
+const forms = {
+  client: {
+    title: "Novo Contrato (Cliente)",
+    fields: [
+      { id: "name", label: "Nome do Cliente / Marca", type: "text" },
+      { id: "value", label: "Valor Mensal (R$)", type: "number" },
+      { id: "services", label: "Escopo de Serviços", type: "text", placeholder: "Ex: 4 Reels e 8 Cards" },
+      { id: "resp", label: "Responsável pelo Atendimento", type: "select", options: () => db.team.map(u=>u.name) },
+      { id: "status", label: "Situação", type: "select", options: ["Ativo","Pausado","Encerrado","Prospect"] },
+      { id: "closingDay", label: "Dia do fechamento do contrato", type: "number", placeholder: "Ex: 10" },
+      { id: "instagram", label: "Instagram / @", type: "text", placeholder: "@cliente" },
+      { id: "notes", label: "Observações", type: "textarea", placeholder: "Informações importantes sobre o cliente..." }
+    ],
+    save: (data) => { db.clients.push({id: generateId(), name: data.name, value: data.value, services: data.services, resp: data.resp, status: data.status, closingDay: data.closingDay, instagram: data.instagram, notes: data.notes || ""}); }
+  },
+  task: {
+    title: "Delegar Tarefa",
+    fields: [
+      { id: "title", label: "O que precisa ser feito?", type: "text" },
+      { id: "resp", label: "Quem vai fazer?", type: "select", options: ["Guilherme", "Eloize", "Elen", "Gabriel"] },
+      { id: "date", label: "Prazo final", type: "date" },
+      { id: "prio", label: "Prioridade", type: "select", options: ["Normal", "Alta", "Urgente"] },
+      { id: "notes", label: "Observações (opcional)", type: "textarea", placeholder: "Detalhes, contexto, referências ou instruções..." }
+    ],
+    save: (data) => {
+      db.tasks.push({
+        id: generateId(),
+        title: data.title,
+        resp: data.resp,
+        date: data.date,
+        prio: data.prio,
+        status: "A fazer",
+        notes: data.notes || ""
+      });
+    }
+  },
+  content: {
+    title: "Criar Card de Conteúdo",
+    fields: [
+      { id: "title", label: "Tema / Título", type: "text" },
+      { id: "client", label: "Cliente", type: "select", options: () => db.clients.map(c=>c.name) },
+      { id: "format", label: "Formato", type: "select", options: ["Reel", "Card", "Carrossel", "Edição de Vídeo", "Stories"] },
+      { id: "resp", label: "Responsável atual (quem está com a bola?)", type: "select", options: ["Guilherme", "Eloize", "Elen", "Gabriel"] },
+      { id: "link", label: "Link de Referência ou Drive (Opcional)", type: "text", placeholder: "https://drive.google.com/..." },
+      { id: "notes", label: "Observações (opcional)", type: "textarea", placeholder: "Briefing, alterações, pendências..." }
+    ],
+    save: (data) => { db.contents.push({id: generateId(), title: data.title, client: data.client, format: data.format, resp: data.resp, link: data.link, notes: data.notes || "", stage: "IDEIA"}); }
+  },
+  capture: {
+    title: "Agendar Captação de Imagens",
+    fields: [
+      { id: "client", label: "Cliente", type: "select", options: () => db.clients.map(c=>c.name) },
+      { id: "date", label: "Data da Captação", type: "date" },
+      { id: "time", label: "Horário", type: "time" },
+      { id: "loc", label: "Localização", type: "text" },
+      { id: "resp", label: "Quem fará a captação?", type: "select", options: () => db.team.map(u=>u.name) }
+    ],
+    save: (data) => { db.captures.push({id: generateId(), client: data.client, date: data.date, time: data.time, loc: data.loc, resp: data.resp}); }
+  }
+};
+
+let currentFormType = null;
+
+function openModal(type) {
+  currentFormType = type;
+  const config = forms[type];
+  let html = `<h2>${config.title}</h2><div class="form">`;
+  
+  config.fields.forEach(f => {
+    html += `<label>${f.label}`;
+    if(f.type === 'select') {
+      const opts = typeof f.options === 'function' ? f.options() : f.options;
+      html += `<select id="input_${f.id}">${opts.map(o=>`<option value="${o}">${o}</option>`).join("")}</select>`;
+    } else if(f.type === 'textarea') {
+      html += `<textarea id="input_${f.id}" rows="4" placeholder="${f.placeholder||''}"></textarea>`;
+    } else {
+      html += `<input type="${f.type}" id="input_${f.id}" placeholder="${f.placeholder||''}">`;
+    }
+    html += `</label>`;
+  });
+
+  html += `<div class="form-actions"><button class="btn secondary" onclick="closeModal()">Cancelar</button> <button class="btn" onclick="submitModal()">Salvar Dados</button></div></div>`;
+  
+  document.getElementById("modalBox").innerHTML = html;
+  document.getElementById("modal").classList.add("show");
+}
+
+function submitModal() {
+  const config = forms[currentFormType];
+  const data = {};
+  let valid = true;
+  
+  config.fields.forEach(f => {
+    const val = document.getElementById(`input_${f.id}`).value;
+    if(f.type !== 'text' || f.id !== 'link') { // Ignora validação no link opcional
+      if(!val) valid = false;
+    }
+    data[f.id] = val;
+  });
+
+  if(!valid) { alert("Preencha todos os campos obrigatórios."); return; }
+  
+  config.save(data);
+  saveData();
+  closeModal();
+  render();
+  showToast(`${config.title} criado com sucesso!`);
+}
+
+function closeModal() { document.getElementById("modal").classList.remove("show"); }
+
+// Gestão Gate (Senha Segura)
+function openGate() {
+  // O autocomplete="off" aliado à estrutura impede a sugestão indesejada de senha do navegador.
+  document.getElementById("modalBox").innerHTML = `
+    <h2>🔒 Acesso Restrito</h2>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:15px">O faturamento e dados comerciais são restritos à Diretoria.</p>
+    <div class="form">
+      <input id="gatePass" type="password" placeholder="Digite a senha" autofocus autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+      <div class="form-actions">
+        <button class="btn secondary" onclick="closeModal()">Cancelar</button> 
+        <button class="btn" onclick="unlock()">Desbloquear</button>
+      </div>
+    </div>`;
+  document.getElementById("modal").classList.add("show");
+  setTimeout(()=>document.getElementById("gatePass").focus(), 100);
+}
+
+function unlock() {
+  if(document.getElementById("gatePass").value === "1007") {
+    restricted = true; closeModal(); show("gestao"); showToast("Faturamento Desbloqueado.", "🔓");
+  } else {
+    alert("Acesso negado. Senha incorreta.");
+  }
+}
+
+// Iniciar app
+updateCurrentUserUI();
+render();
+
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape") closeModal();
+});
+</script>
+
+
+</body>
+</html>
